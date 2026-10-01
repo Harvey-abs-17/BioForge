@@ -22,7 +22,11 @@ vazn = os.path.join(r"D:\quera\BioForge-main\data", "codon_weoghts.txt")
 
 
 vazn_dic={}
+<<<<<<< HEAD
 for j in open(vazn,'r'):
+=======
+for j in open(vazn,"r"):
+>>>>>>> 804e7a9835a9a333202dad69878690f8b88fadb2
     j=j.strip()
     if j=="":
         continue

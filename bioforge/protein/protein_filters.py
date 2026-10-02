@@ -1,29 +1,16 @@
-import calculate_weight
+from calculate_weight import calculate_weight
 
-class ProteinFilter:
-    def apply(self, proteins):
-        pass
-
-class LengthFilter(ProteinFilter):
-    def __init__(self, min_length):
-        self.min_length = min_length
-
-    def apply(self, proteins):
+def length_filter(proteins, min_length):
         result = []
         for protein in proteins:
-            if len(protein) >= self.min_length:
+            if len(protein) >= min_length:
                 result.append(protein)
         return result
 
-class WeightFilter(ProteinFilter):
-    def __init__(self, min_weight, amino_weights):
-        self.min_weight = min_weight
-        self.amino_weights = amino_weights
-
-    def apply(self, proteins):
+def weight_filter(proteins, min_weight, amino_weights):
         result = []
         for protein in proteins:
-             protein_weight = calculate_weight.calculate_weight(protein, self.amino_weights)
-             if protein_weight >= self.min_weight:
+             protein_weight = calculate_weight(protein, amino_weights)
+             if protein_weight >= min_weight:
                  result.append(protein)
         return result

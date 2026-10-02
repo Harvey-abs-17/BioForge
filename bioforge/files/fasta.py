@@ -4,7 +4,7 @@ import re
 
 from bioforge.errors import FastaFormatError
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("bioforge")
 
 # regex from the project document
 HEADER_PATTERN = r"^>\s*(?P<id>\S+)\s*(?P<desc>.*)$"
@@ -75,7 +75,7 @@ def parse_fasta(path):
                 header_id, description = parse_header(line, line_number)
 
                 if header_id in seen_ids:
-                    logger.warning(f"Line {line_number}: duplicate ID {header_id}")
+                    logger.warning(f"Duplicate sequence ID: {header_id}")
                 seen_ids.append(header_id)
 
                 # start the new record

@@ -1,6 +1,6 @@
 import logging
 import re
-from dataclasses import dataclass
+
 
 from bioforge.errors import FastaFormatError
 
@@ -8,16 +8,6 @@ logger = logging.getLogger(__name__)
 
 # regex from the project document
 HEADER_PATTERN = r"^>\s*(?P<id>\S+)\s*(?P<desc>.*)$"
-
-
-@dataclass
-class FastaRecord:
-    """A single record read from a FASTA file."""
-
-    id: str
-    description: str
-    sequence: str
-    organism: str | None = None
 
 
 def parse_header(line, line_number):
@@ -40,18 +30,22 @@ def extract_organism(description):
 
 
 def build_record(header_id, description, sequence_lines, line_number):
-    """Make a FastaRecord from a header and its sequence lines."""
+    """Make a record dictionary from a header and its sequence lines."""
     if len(sequence_lines) == 0:
         raise FastaFormatError(
             f"Line {line_number}: header {header_id} has no sequence"
         )
     sequence = "".join(sequence_lines)
     organism = extract_organism(description)
-    return FastaRecord(header_id, description, sequence, organism)
-
-
+    record = {
+        "id": header_id,
+        "description": description,
+        "sequence": sequence,
+        "organism": organism,
+    }
+    return record
 def parse_fasta(path):
-    """Read a FASTA file and return a list of FastaRecord objects."""
+    """Read a FASTA file and return a list of record dictionaries."""
     records = []
     seen_ids = []
 

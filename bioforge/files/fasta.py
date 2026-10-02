@@ -2,7 +2,7 @@ import logging
 import re
 from dataclasses import dataclass
 
-from bioforge.exceptions import FastaFormatError
+from bioforge.errors import FastaFormatError
 
 logger = logging.getLogger(__name__)
 

@@ -5,7 +5,7 @@ from bioforge.errors import FastaFormatError
 
 logger = logging.getLogger("bioforge")
 
-# regex from the project document
+
 HEADER_PATTERN = r"^>\s*(?P<id>\S+)\s*(?P<desc>.*)$"
 
 
@@ -26,7 +26,7 @@ class FastaParser:
                 line_number = line_number + 1
                 line = line.strip()
 
-                # skip empty lines
+                
                 if line == "":
                     continue
 
@@ -35,7 +35,7 @@ class FastaParser:
                 else:
                     self._add_sequence_line(line, line_number)
 
-        # the last record has no ">" after it, so save it here
+        
         self._save_current_record()
 
         if len(self.records) == 0:

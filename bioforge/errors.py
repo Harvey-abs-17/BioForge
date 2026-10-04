@@ -1,14 +1,18 @@
+
 class BioForgeError(Exception):
-    """Base class for all BioForge errors."""
+    pass
+
 
 
 class FastaFormatError(BioForgeError):
-    """Raised when a FASTA file has an invalid structure."""
+    pass
+
 
 
 class InvalidSequenceError(BioForgeError):
-     """Raised when a DNA sequence contains invalid characters."""
+    pass
+
 
 
 class DataFileError(BioForgeError):
-     """Raised when a data file is missing or malformed."""
+    pass

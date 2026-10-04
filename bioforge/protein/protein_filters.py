@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from calculate_weight import calculate_weight
+from bioforge.protein.calculate_weight import calculate_weight
 
 class ProteinFilter(ABC):
     @abstractmethod

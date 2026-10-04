@@ -1,6 +1,3 @@
-class InvalidSequenceError(Exception):
-    pass
-
 class DNASequence:
     def __init__(self, sequence):
         self.sequence = sequence.upper()

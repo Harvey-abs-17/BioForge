@@ -1,3 +1,6 @@
+from bioforge.errors import InvalidSequenceError
+
+
 class DNASequence:
     def __init__(self, sequence):
         self.sequence = sequence.upper()

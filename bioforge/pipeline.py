@@ -2,7 +2,7 @@ import logging
 import os
 from datetime import datetime
 
-from bioforge.errors import InvalidSequenceError
+from bioforge.errors import FastaFormatError, InvalidSequenceError
 from bioforge.files.data_loader import load_amino_weights, load_codon_table
 from bioforge.files.fasta import FastaParser
 from bioforge.files.logger import setup_logger
@@ -18,8 +18,17 @@ logger = logging.getLogger("bioforge")
 
 
 def parse_fasta(path):
+    if not os.path.exists(path):
+        error = f"FASTA file not found: {path}"
+        logger.error(error)
+        raise FastaFormatError(error)
+
     parser = FastaParser(path)
-    return parser.parse()
+    try:
+        return parser.parse()
+    except FastaFormatError as error:
+        logger.error(str(error))
+        raise
 
 
 def find_all_orfs(fasta_path):

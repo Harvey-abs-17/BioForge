@@ -1,5 +1,6 @@
 class ORF:
     def __init__(self, rna, strand, frame, start_pos, is_complete):
+        self.id = None
         self.rna = rna
         self.protein = ""
         self.strand = strand

@@ -1,5 +1,5 @@
 from bioforge.sequences.translation import translate
-from bioforge.protein.protein_filters import *
+
 
 def translate_and_filter(rna_sequences, codon_table, filters):
     proteins = []

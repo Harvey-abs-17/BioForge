@@ -84,9 +84,14 @@ def run_pipeline(
         WeightFilter(min_weight, amino_weights),
     ]
 
-    filtered_orfs = orfs
+    filtered_proteins = [orf.protein for orf in orfs]
     for protein_filter in filters:
-        filtered_orfs = protein_filter.apply(filtered_orfs)
+        filtered_proteins = protein_filter.apply(filtered_proteins)
+
+    filtered_orfs = []
+    for orf in orfs:
+        if orf.protein in filtered_proteins:
+            filtered_orfs.append(orf)
 
     annotate_orfs(filtered_orfs)
     write_report(filtered_orfs, output_directory)

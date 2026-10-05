@@ -1,0 +1,18 @@
+>seq001 organism=E_coli sample=A
+ATGGCT
+TAA
+
+>seq002 organism=Human sample=B
+aaaatgaaaggg
+
+>seq003 organism=Mouse sample=C
+TTAAGCCAT
+
+>seq004 organism=Yeast sample=D
+AATGGCTTAA
+
+>seq005 organism=Plant sample=E
+AAATGGCTTAA
+
+>seq006 organism=E_coli sample=F
+ATGTAA

@@ -1,5 +1,6 @@
 import logging
 import os
+from datetime import datetime
 
 from bioforge.errors import InvalidSequenceError
 from bioforge.files.data_loader import load_amino_weights, load_codon_table
@@ -55,7 +56,9 @@ def run_pipeline(
     amino_weights_path="data/amino_weights.txt",
 ):
     os.makedirs(output_directory, exist_ok=True)
-    setup_logger(os.path.join(output_directory, "bioforge.log"))
+    run_id = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+    log_name = f"bioforge_{run_id}.log"
+    setup_logger(os.path.join(output_directory, log_name))
 
     codon_table = load_codon_table(codon_table_path)
     amino_weights = load_amino_weights(amino_weights_path)
@@ -83,5 +86,5 @@ def run_pipeline(
             filtered_orfs.append(orf)
 
     annotate_orfs(filtered_orfs)
-    write_report(filtered_orfs, output_directory)
+    write_report(filtered_orfs, output_directory, run_id)
     return filtered_orfs

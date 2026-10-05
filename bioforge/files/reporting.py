@@ -8,9 +8,10 @@ def annotate_orfs(orfs):
         number = number + 1
 
 
-def write_report(orfs, output_directory):
+def write_report(orfs, output_directory, run_id):
     os.makedirs(output_directory, exist_ok=True)
-    report_path = os.path.join(output_directory, "report.txt")
+    report_name = f"report_{run_id}.txt"
+    report_path = os.path.join(output_directory, report_name)
 
     with open(report_path, "w", encoding="utf-8") as report:
         for orf in orfs:

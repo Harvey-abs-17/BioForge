@@ -2,8 +2,10 @@ import os
 
 
 def annotate_orfs(orfs):
-    for number, orf in enumerate(orfs, start=1):
+    number = 1
+    for orf in orfs:
         orf.id = f"BFG_{number:03d}"
+        number = number + 1
 
 
 def write_report(orfs, output_directory):

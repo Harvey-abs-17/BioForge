@@ -52,7 +52,9 @@ def _read_data_file(path):
 
     lines = []
     with open(path, encoding="utf-8") as file:
-        for line_number, line in enumerate(file, start=1):
+        line_number = 0
+        for line in file:
+            line_number = line_number + 1
             line = line.strip()
             if line != "" and not line.startswith("#"):
                 lines.append((line_number, line))

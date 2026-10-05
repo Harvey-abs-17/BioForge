@@ -1,6 +1,12 @@
 from bioforge.sequences.translation import translate
 
 
+def translate_orfs(orfs, codon_table):
+    for orf in orfs:
+        orf.protein = translate(orf.rna, codon_table)
+    return orfs
+
+
 def translate_and_filter(rna_sequences, codon_table, filters):
     proteins = []
     for rna in rna_sequences:

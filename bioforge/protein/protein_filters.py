@@ -13,7 +13,8 @@ class LengthFilter(ProteinFilter):
     def apply(self, proteins):
         result = []
         for protein in proteins:
-            if len(protein) >= self.min_length:
+            sequence = protein.protein if hasattr(protein, "protein") else protein
+            if len(sequence) >= self.min_length:
                 result.append(protein)
         return result
 
@@ -25,7 +26,8 @@ class WeightFilter(ProteinFilter):
     def apply(self, proteins):
         result = []
         for protein in proteins:
-             protein_weight = calculate_weight(protein, self.amino_weights)
-             if protein_weight >= self.min_weight:
-                 result.append(protein)
+            sequence = protein.protein if hasattr(protein, "protein") else protein
+            protein_weight = calculate_weight(sequence, self.amino_weights)
+            if protein_weight >= self.min_weight:
+                result.append(protein)
         return result

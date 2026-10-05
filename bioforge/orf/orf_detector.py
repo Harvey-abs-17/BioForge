@@ -2,9 +2,6 @@ from .models import ORF
 
 
 class ORFDetector:
-    def __init__(self, codon_table):
-        self.codon_table = codon_table
-
     def find_forward_orfs(self, rna_sequence):
         orfs = []
 
@@ -23,7 +20,6 @@ class ORFDetector:
         return orfs
 
     def create_orf(self, rna_sequence, frame, start_position):
-        protein = ""
         position = start_position
         stop_codons = ["UAA", "UAG", "UGA"]
 
@@ -32,18 +28,17 @@ class ORFDetector:
 
             if codon in stop_codons:
                 return ORF(
-                    protein=protein,
+                    rna=rna_sequence[start_position:position + 3],
                     strand="Forward",
                     frame=frame,
                     start_pos=start_position,
                     is_complete=True,
                 )
 
-            protein = protein + self.codon_table[codon]
             position = position + 3
 
         return ORF(
-            protein=protein,
+            rna=rna_sequence[start_position:],
             strand="Forward",
             frame=frame,
             start_pos=start_position,

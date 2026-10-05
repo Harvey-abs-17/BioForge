@@ -27,9 +27,9 @@ def load_valid_records(fasta_path):
     return valid_records
 
 
-def load_records_with_orfs(fasta_path, codon_table):
+def load_records_with_orfs(fasta_path):
     records = load_valid_records(fasta_path)
-    detector = ORFDetector(codon_table)
+    detector = ORFDetector()
     records_with_orfs = []
 
     for record in records:

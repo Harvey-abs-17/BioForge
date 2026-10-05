@@ -3,7 +3,7 @@ import os
 
 from bioforge.errors import InvalidSequenceError
 from bioforge.files.data_loader import load_amino_weights, load_codon_table
-from bioforge.files.fasta import parse_fasta
+from bioforge.files.fasta import FastaParser
 from bioforge.files.logger import setup_logger
 from bioforge.files.reporting import annotate_orfs, write_report
 from bioforge.orf.orf_detector import ORFDetector
@@ -14,6 +14,11 @@ from bioforge.sequences.translation import translate
 
 
 logger = logging.getLogger("bioforge")
+
+
+def parse_fasta(path):
+    parser = FastaParser(path)
+    return parser.parse()
 
 
 def find_all_orfs(fasta_path):

@@ -99,8 +99,3 @@ class FastaParser:
             if word.startswith("organism="):
                 return word[len("organism="):]
         return None
-
-
-def parse_fasta(path):
-    parser = FastaParser(path)
-    return parser.parse()

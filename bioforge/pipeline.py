@@ -7,9 +7,10 @@ from bioforge.files.fasta import parse_fasta
 from bioforge.files.logger import setup_logger
 from bioforge.files.reporting import annotate_orfs, write_report
 from bioforge.orf.orf_detector import ORFDetector
-from bioforge.protein.processing import filter_proteins, translate_sequences
+from bioforge.protein.processing import translate_and_filter
 from bioforge.protein.protein_filters import LengthFilter, WeightFilter
 from bioforge.sequences.dna import DNASequence
+from bioforge.sequences.translation import translate
 
 
 logger = logging.getLogger("bioforge")
@@ -81,20 +82,20 @@ def run_pipeline(
     for orf in all_orfs:
         rna_sequences.append(orf.rna)
 
-    proteins = translate_sequences(rna_sequences, codon_table)
-
-    for index in range(len(all_orfs)):
-        all_orfs[index].protein = proteins[index]
-
     filters = [
         LengthFilter(min_length),
         WeightFilter(min_weight, amino_weights),
     ]
 
-    filtered_proteins = filter_proteins(proteins, filters)
+    filtered_proteins = translate_and_filter(
+        rna_sequences,
+        codon_table,
+        filters,
+    )
 
     filtered_orfs = []
     for orf in all_orfs:
+        orf.protein = translate(orf.rna, codon_table)
         if orf.protein in filtered_proteins:
             filtered_orfs.append(orf)
 

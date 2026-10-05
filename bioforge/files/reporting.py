@@ -1,0 +1,25 @@
+import os
+
+
+def annotate_orfs(orfs):
+    for number, orf in enumerate(orfs, start=1):
+        orf.id = f"BFG_{number:03d}"
+
+
+def write_report(orfs, output_directory):
+    os.makedirs(output_directory, exist_ok=True)
+    report_path = os.path.join(output_directory, "report.txt")
+
+    with open(report_path, "w", encoding="utf-8") as report:
+        for orf in orfs:
+            if orf.is_complete:
+                status = "Complete"
+            else:
+                status = "Incomplete"
+
+            report.write(f"ID: {orf.id}\n")
+            report.write(f"Strand: {orf.strand}\n")
+            report.write(f"Frame: {orf.frame}\n")
+            report.write(f"Start Position: {orf.start_pos}\n")
+            report.write(f"Protein: {orf.protein}\n")
+            report.write(f"Status: {status}\n\n")

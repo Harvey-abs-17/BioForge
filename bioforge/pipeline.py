@@ -16,47 +16,29 @@ from bioforge.sequences.translation import translate
 logger = logging.getLogger("bioforge")
 
 
-def load_valid_records(fasta_path):
+def find_all_orfs(fasta_path):
     records = parse_fasta(fasta_path)
-    valid_records = []
+    detector = ORFDetector()
+    all_orfs = []
 
     for record in records:
         try:
-            DNASequence(record["sequence"])
-            valid_records.append(record)
-
+            dna = DNASequence(record["sequence"])
         except InvalidSequenceError:
-            logger.error(
-                "Record %s contains an invalid DNA sequence",
-                record["id"],
-            )
+            logger.error(f"Record {record['id']} contains an invalid DNA sequence")
+            continue
 
-    return valid_records
-
-
-def load_records_with_orfs(fasta_path):
-    records = load_valid_records(fasta_path)
-    detector = ORFDetector()
-    records_with_orfs = []
-
-    for record in records:
-        dna = DNASequence(record["sequence"])
         forward_rna = dna.to_rna()
-
         reverse_dna = DNASequence(dna.reverse_complement())
         reverse_rna = reverse_dna.to_rna()
 
         forward_orfs = detector.find_forward_orfs(forward_rna)
-        reverse_orfs = detector.find_reverse_orfs(
-            dna.sequence,
-            reverse_rna,
-        )
+        reverse_orfs = detector.find_reverse_orfs(dna.sequence, reverse_rna)
 
-        record_with_orfs = record.copy()
-        record_with_orfs["orfs"] = forward_orfs + reverse_orfs
-        records_with_orfs.append(record_with_orfs)
+        all_orfs.extend(forward_orfs)
+        all_orfs.extend(reverse_orfs)
 
-    return records_with_orfs
+    return all_orfs
 
 
 def run_pipeline(
@@ -72,11 +54,7 @@ def run_pipeline(
 
     codon_table = load_codon_table(codon_table_path)
     amino_weights = load_amino_weights(amino_weights_path)
-    records = load_records_with_orfs(fasta_path)
-
-    all_orfs = []
-    for record in records:
-        all_orfs.extend(record["orfs"])
+    all_orfs = find_all_orfs(fasta_path)
 
     rna_sequences = []
     for orf in all_orfs:

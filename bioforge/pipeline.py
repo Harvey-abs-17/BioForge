@@ -7,7 +7,7 @@ from bioforge.files.fasta import parse_fasta
 from bioforge.files.logger import setup_logger
 from bioforge.files.reporting import annotate_orfs, write_report
 from bioforge.orf.orf_detector import ORFDetector
-from bioforge.protein.processing import translate_orfs
+from bioforge.protein.processing import filter_proteins, translate_sequences
 from bioforge.protein.protein_filters import LengthFilter, WeightFilter
 from bioforge.sequences.dna import DNASequence
 
@@ -73,23 +73,28 @@ def run_pipeline(
     amino_weights = load_amino_weights(amino_weights_path)
     records = load_records_with_orfs(fasta_path)
 
-    orfs = []
+    all_orfs = []
     for record in records:
-        record_orfs = record["orfs"]
-        translate_orfs(record_orfs, codon_table)
-        orfs.extend(record_orfs)
+        all_orfs.extend(record["orfs"])
+
+    rna_sequences = []
+    for orf in all_orfs:
+        rna_sequences.append(orf.rna)
+
+    proteins = translate_sequences(rna_sequences, codon_table)
+
+    for index in range(len(all_orfs)):
+        all_orfs[index].protein = proteins[index]
 
     filters = [
         LengthFilter(min_length),
         WeightFilter(min_weight, amino_weights),
     ]
 
-    filtered_proteins = [orf.protein for orf in orfs]
-    for protein_filter in filters:
-        filtered_proteins = protein_filter.apply(filtered_proteins)
+    filtered_proteins = filter_proteins(proteins, filters)
 
     filtered_orfs = []
-    for orf in orfs:
+    for orf in all_orfs:
         if orf.protein in filtered_proteins:
             filtered_orfs.append(orf)
 

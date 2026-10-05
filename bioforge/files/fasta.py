@@ -10,14 +10,11 @@ HEADER_PATTERN = r"^>\s*(?P<id>\S+)\s*(?P<desc>.*)$"
 
 
 class FastaParser:
-    """Read a FASTA file and turn it into a list of record dictionaries."""
-
     def __init__(self, path):
         self.path = path
         self._reset()
 
     def parse(self):
-        """Read the file and return a list of record dictionaries."""
         self._reset()
 
         with open(self.path, encoding="utf-8") as file:
@@ -44,7 +41,6 @@ class FastaParser:
         return self.records
 
     def _reset(self):
-        """Clear everything before a new read."""
         self.records = []
         self.seen_ids = []
         self.current_id = None
@@ -53,7 +49,6 @@ class FastaParser:
         self.current_line_number = 0
 
     def _start_new_record(self, line, line_number):
-        """Save the previous record and start a new one from a header line."""
         self._save_current_record()
 
         header_id, description = self._parse_header(line, line_number)
@@ -68,7 +63,6 @@ class FastaParser:
         self.current_line_number = line_number
 
     def _add_sequence_line(self, line, line_number):
-        """Add one DNA line to the current record."""
         if self.current_id is None:
             raise FastaFormatError(
                 f"Line {line_number}: sequence before the first header"
@@ -76,7 +70,6 @@ class FastaParser:
         self.current_lines.append(line.upper())
 
     def _save_current_record(self):
-        """Turn the current record into a dictionary and keep it."""
         if self.current_id is None:
             return
 
@@ -95,14 +88,12 @@ class FastaParser:
         self.records.append(record)
 
     def _parse_header(self, line, line_number):
-        """Split a header line into id and description."""
         match = re.match(HEADER_PATTERN, line)
         if match is None:
             raise FastaFormatError(f"Line {line_number}: header has no ID")
         return match.group("id"), match.group("desc")
 
     def _extract_organism(self, description):
-        """Return the organism name from the description, or None."""
         words = description.split()
         for word in words:
             if word.startswith("organism="):
@@ -111,6 +102,5 @@ class FastaParser:
 
 
 def parse_fasta(path):
-    """Read a FASTA file and return a list of record dictionaries."""
     parser = FastaParser(path)
     return parser.parse()

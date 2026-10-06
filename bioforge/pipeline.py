@@ -66,7 +66,7 @@ def run_pipeline(
 ):
     os.makedirs(output_directory, exist_ok=True)
     run_id = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-    log_name = f"bioforge_{run_id}.log"
+    log_name = "bioforge.log"
     setup_logger(os.path.join(output_directory, log_name))
 
     codon_table = load_codon_table(codon_table_path)

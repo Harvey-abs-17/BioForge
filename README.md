@@ -22,7 +22,40 @@ BioForge is a Python command-line pipeline for DNA sequence analysis.
 
 ### FASTA Input
 
-<!-- Explain the expected FASTA format and provide a small example. -->
+BioForge accepts a multi-record FASTA file as its input.
+
+Each record starts with a header line beginning with `>`. The first part of the header is used as the sequence ID, and the remaining text is stored as the description.
+
+If the header contains an `organism` value, BioForge extracts it separately.
+
+Example:
+
+```text
+>seq001 organism=E_coli sample=A
+ATGCTTTCATAG
+
+>seq002 organism=Human sample=B
+cccatggggtaa
+```
+
+For each record, BioForge extracts:
+
+- ID
+- Description
+- DNA sequence
+- Organism, when available
+
+Empty lines are ignored. Lowercase DNA sequences are accepted and converted to uppercase.
+
+A FASTA file is considered invalid when:
+
+- Sequence data appears before the first header.
+- A header does not have a sequence.
+- The file does not contain any records.
+
+When a duplicate sequence ID is found, a warning is written to the log file.
+
+The FASTA file is opened using UTF-8 encoding.
 
 ### Data Files
 

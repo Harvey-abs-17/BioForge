@@ -155,11 +155,79 @@ If an incomplete ORF does not contain a stop codon, BioForge translates all of i
 
 ### Molecular Weight
 
-<!-- Explain how protein molecular weight is calculated. -->
+BioForge calculates the molecular weight of each translated protein.
+
+The amino acid weights are loaded from:
+
+data/amino_weights.txt
+
+The weights are not hardcoded in the protein-processing code.
+
+The molecular weight is calculated by adding the weight of every amino acid in the protein sequence.
+
+Example weights:
+
+M 131.040
+A 71.037
+C 103.009
+
+Protein:
+
+MAC
+
+Calculation:
+
+M = 131.040
+A = 71.037
+C = 103.009
+
+Total Weight = 305.086
+
 
 ### Protein Filters
 
-<!-- Explain LengthFilter and WeightFilter. -->
+BioForge applies two filters to the translated protein sequences:
+
+- LengthFilter
+- WeightFilter
+
+Both filters use the same method:
+
+apply(proteins)
+
+LengthFilter keeps proteins whose sequence length is greater than or equal to the minimum length provided through --min-length.
+
+Example:
+
+Proteins: MA, MAKG, MAKGT
+Minimum Length: 4
+Result: MAKG, MAKGT
+
+The condition is:
+
+Protein Length >= Minimum Length
+
+WeightFilter keeps proteins whose molecular weight is greater than or equal to the minimum weight provided through --min-weight.
+
+Example:
+
+Protein 1 Weight: 180.0
+Protein 2 Weight: 320.0
+Protein 3 Weight: 510.0
+Minimum Weight: 300.0
+Result: Protein 2, Protein 3
+
+The condition is:
+
+Protein Weight >= Minimum Weight
+
+The filters are applied in this order:
+
+LengthFilter
+↓
+WeightFilter
+
+Each filter returns a new list containing only the matching protein sequences.
 
 ## Output Files
 

@@ -248,6 +248,40 @@ Status: Complete
 
 The log records problems such as invalid DNA sequences, duplicate FASTA IDs, missing data files, and malformed data-file lines.
 
+## Design Decisions
+
+### 1. DNASequence as a Class
+
+`DNASequence` is a class because it keeps a DNA sequence together with its related operations, such as validation, complement, reverse complement, RNA conversion, and GC content calculation.
+
+This is an example of encapsulation because the data and its related behavior are stored in one place.
+
+### 2. ORF as a Class
+
+Each detected ORF has several related values, including RNA, protein, strand, frame, start position, and completion status.
+
+The `ORF` class keeps this information together and makes it easier to pass an ORF between different pipeline stages.
+
+### 3. FastaParser as a Class
+
+`FastaParser` is a class because it needs to remember the current record while reading a multi-record FASTA file.
+
+It stores information such as the current ID, description, sequence lines, and previously seen IDs.
+
+### 4. Simple Operations as Functions
+
+Operations such as `translate`, `calculate_weight`, `annotate_orfs`, and `write_report` are functions because they perform one clear task and do not need to keep internal state.
+
+Using functions keeps these operations simple and easy to understand.
+
+### 5. Inheritance and Polymorphism for Protein Filters
+
+`ProteinFilter` is the base class for protein filters.
+
+`LengthFilter` and `WeightFilter` inherit from it and implement the same `apply` method. This is an example of inheritance.
+
+The pipeline can apply different filter objects using the same method without needing to know their exact type. This is an example of polymorphism.
+
 ## Project Structure
 
 ```text

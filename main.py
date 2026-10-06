@@ -1,5 +1,7 @@
 import argparse
 
+from bioforge.pipeline import run_pipeline
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -15,13 +17,12 @@ def main():
 
     args = parser.parse_args()
 
-    print(f"Input: {args.input}")
-    print(f"Output: {args.out}")
-    print(f"Minimum Length: {args.min_length}")
-
-    weight = int(args.min_weight) if args.min_weight.is_integer(
-    ) else args.min_weight
-    print(f"Minimum Weight: {weight}")
+    run_pipeline(
+        fasta_path=args.input,
+        output_directory=args.out,
+        min_length=args.min_length,
+        min_weight=args.min_weight,
+    )
 
 
 if __name__ == '__main__':
